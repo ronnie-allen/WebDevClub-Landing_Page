@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebDev Club Flipbook with Attractive Cover</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Playfair+Display:ital,wght@1,700&display=swap');
+
+    body {
+      background: url('back.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #222;
+    }
+
+    #book-wrapper {
+      position: relative;
+      transition: transform 0.6s ease;
+    }
+
+    #book-wrapper::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      width: calc(100% + 40px);
+      height: calc(100% + 40px);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 15px;
+      z-index: -1;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+      transition: all 0.5s ease;
+    }
+
+    #book-wrapper.end-cover::before {
+      left: -18px;
+      width: 53%;
+    }
+
+    #book-wrapper.center-cover::before {
+      left: 48%;
+      width: 55%;
+    }
+
+    #book-wrapper.center-cover {
+      transform: translateX(-275px);
+    }
+
+    #book-wrapper.end-cover {
+      transform: translateX(275px);
+    }
+
+    #book {
+      width: 1100px;
+      height: 700px;
+      perspective: 2000px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .book-page {
+      width: 550px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 550px;
+      transform-style: preserve-3d;
+      transform-origin: left;
+      transition: transform 1s ease;
+    }
+
+    .book-page.flipped {
+      transform: rotateY(-180deg);
+      z-index: 0 !important;
+    }
+
+    .page-front,
+    .page-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: white;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+      padding: 40px;
+      box-sizing: border-box;
+      backface-visibility: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #333;
+    }
+
+    .page-front {
+      border-left: 1px solid #ccc;
+    }
+
+    .page-back {
+      transform: rotateY(180deg);
+      border-right: 1px solid #ccc;
+    }
+
+    /* Cover page styles */
+    .logo {
+      width: 350px; /* Increased size */
+      margin-bottom: 30px;
+      filter: drop-shadow(0 4px 4px rgba(0,0,0,0));
+      border-radius: 20px;
+      object-fit: contain;
+    }
+
+    .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2em;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+    }
+
+    .cover-subtitle {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2em;
+      color: #007bff;
+      font-weight: 600;
+      text-shadow: 1px 1px 5px rgba(0,123,255,0.6);
+      margin-bottom: 25px;
+    }
+
+    .cover-motto {
+      font-style: italic;
+      font-size: 1.5em;
+      color: #555;
+      max-width: 80%;
+      line-height: 1.4;
+      font-weight: 500;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Registration button styling */
+    .register-btn {
+      background: #007bff;
+      color: white;
+      padding: 15px 35px;
+      font-size: 1.3em;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 8px 15px rgba(0,123,255,0.3);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      margin-top: 20px;
+      user-select: none;
+    }
+
+    .register-btn:hover {
+      background: #0056b3;
+      transform: scale(1.1);
+      box-shadow: 0 10px 20px rgba(0,86,179,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<div id="book-wrapper">
+  <div id="book"></div>
+</div>
+
+<script>
+  const bookWrapper = document.getElementById("book-wrapper");
+  const book = document.getElementById("book");
+
+  const pagesContent = [
+    [
+      `
+        <img src="Karunya-Logo.png" alt="Karunya Logo" class="logo">
+        <div class="cover-title">ATOM</div>
+        <div class="cover-subtitle">WebDev Club</div>
+        <div class="cover-motto">“Code with purpose, build with passion.”</div>
+      `, ""
+    ],
+    [
+      `<h2>📌 Why They Want to Learn</h2>
+       <ul>
+         <li>The internet connects people, businesses, and ideas — learning web development lets them build that connection.</li>
+         <li>It’s not just coding — it’s creating solutions, communities, and opportunities.</li>
+         <li>They gain freedom to bring their own ideas to life instead of waiting for someone else to build them.</li>
+       </ul>`,
+      `<h2>📌 Why Web Dev is Powerful</h2>
+       <p>Everything runs on the web — from apps to businesses. Learning web dev gives students the power to create, innovate, and share with the world.</p>
+       <p>They become creators, not just consumers, shaping the future with their ideas.</p>`
+    ],
+    [
+      `<h2>📌 What They Will Get If They Learn</h2>
+       <ul>
+         <li>Real-world skills: design stunning interfaces, write clean code, build secure backends, and deploy live apps.</li>
+         <li>A strong portfolio with live projects — great for internships, freelancing, or startups.</li>
+         <li>Team experience, GitHub usage, real-world problem-solving — like in the industry.</li>
+       </ul>`,
+      `<h2>📌 Industry-Ready Skills</h2>
+       <p>Students gain practical, in-demand skills companies want. They’ll build UIs, connect to backends, and deploy real applications.</p>
+       <p>It helps them stand out for tech jobs, freelancing, or launching their own ideas.</p>`
+    ],
+    [
+      `<h2>📌 Main Thing in Full Stack</h2>
+       <p>It’s the art of connecting frontend (what users see) and backend (what makes it work).</p>
+       <p>They learn how data flows, how to manage servers, APIs, and databases, and how to build secure, smart systems.</p>`,
+      `<h2>📌 Why Other Domains Need It</h2>
+       <p>Web development empowers AI engineers, data scientists, and analysts to turn models into apps.</p>
+       <ul>
+         <li>Dashboards that show real-time data</li>
+         <li>Interactive tools for non-tech users</li>
+         <li>APIs that plug intelligence into real platforms</li>
+       </ul>`
+    ],
+    [
+      `<h2>📌 By the End, You Will...</h2>
+       <ul>
+         <li>Design, build, and deploy complete web apps from scratch.</li>
+         <li>Connect beautiful frontends to powerful backends and databases.</li>
+         <li>Integrate AI models or pipelines into smart apps and dashboards.</li>
+       </ul>`,
+      `<h2>Ready to Join?</h2>
+       <p>Take the next step in your journey with WebDev Club! 🚀</p>
+       <a href="https://example.com/register" target="_blank" class="register-btn" rel="noopener noreferrer">Register Now!</a>`
+    ]
+  ];
+
+  let current = 0;
+  const pageElements = [];
+
+  for (let i = 0; i < pagesContent.length; i++) {
+    const page = document.createElement("div");
+    page.className = "book-page";
+    page.style.zIndex = pagesContent.length - i;
+
+    const front = document.createElement("div");
+    front.className = "page-front";
+    front.innerHTML = pagesContent[i][0];
+
+    const back = document.createElement("div");
+    back.className = "page-back";
+    back.innerHTML = pagesContent[i][1];
+
+    page.appendChild(front);
+    page.appendChild(back);
+    book.appendChild(page);
+    pageElements.push(page);
+  }
+
+  function updateBookPosition() {
+    bookWrapper.classList.remove("center-cover", "end-cover");
+    if (current === 0) {
+      bookWrapper.classList.add("center-cover");
+    } else if (current === pageElements.length) {
+      bookWrapper.classList.add("end-cover");
+    }
+  }
+
+  book.addEventListener("click", (e) => {
+    const clickX = e.clientX - book.getBoundingClientRect().left;
+    const bookWidth = book.offsetWidth;
+
+    if (clickX > bookWidth / 2) {
+      if (current < pageElements.length) {
+        pageElements[current].classList.add("flipped");
+        current++;
+        updateBookPosition();
+      }
+    } else {
+      if (current > 0) {
+        current--;
+        pageElements[current].classList.remove("flipped");
+        updateBookPosition();
+      }
+    }
+  });
+
+  updateBookPosition();
+</script>
+
+</body>
+</html>
