@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body, html {
+  width: 100%;
+  height: 100%;
+  background: #f0f0f0;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.book {
+  width: 100vw;
+  height: 100vh;
+  perspective: 2000px;
+  position: relative;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 1.2s ease-in-out;
+}
+
+.page .content {
+  font-size: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+/* Individual page styles */
+.cover.front {
+  background: #ffccbc;
+  z-index: 4;
+}
+
+.left {
+  background: #e1f5fe;
+  z-index: 3;
+}
+
+.right {
+  background: #fff9c4;
+  z-index: 2;
+}
+
+.cover.back {
+  background: #c8e6c9;
+  z-index: 1;
+}
+
+/* Flip states */
+.page.flipped {
+  transform: rotateY(-180deg);
+}
